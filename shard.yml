@@ -1,0 +1,19 @@
+name: crystal-devbox
+version: 0.9.0
+
+authors:
+  - 4ndyfix <4ndy@online.de>
+
+targets:
+  crystal-devbox:
+    main: src/launcher.cr
+
+crystal: 0.36.1
+
+license: MIT
+
+dependencies:
+  kemal:
+    github: kemalcr/kemal
+  ansi2html:
+    github: 4ndyfix/ansi2html

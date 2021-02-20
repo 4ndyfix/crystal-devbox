@@ -1,0 +1,59 @@
+
+.header {
+  background: white;
+}
+    
+.header img {
+  float: left;
+  width: 100px;
+  height: 100px;
+}
+    
+.header h2 {
+  position: relative;
+  top: 14px;
+  left: 40px;
+}
+    
+.header h4 {
+  position: relative;
+  top: 16px;
+  left: 10px;
+}
+    
+.header h8 {
+  position: right;
+}
+    
+.header::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+    
+.content::after {
+  content: "";
+  clear: both;
+  display: table;    
+}
+    
+.footer {
+  bottom: 4;
+  left: 8;
+  position: relative;
+  width: 98.5%;
+}
+    
+.footer p {
+  font-size: 8px;
+}
+    
+.not_found {
+  text-align: center;
+}
+    
+pre {
+  color:rgb(248, 248, 240);
+  background: rgb(4, 7, 36);
+}
+    

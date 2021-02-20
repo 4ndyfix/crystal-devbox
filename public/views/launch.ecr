@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="css/styles.css" type="text/css">
+    <link rel="icon" sizes="20x20" href="images/crystal-icon.png">
+    <title>Crystal Devbox Launcher</title>
+  </head>
+  <body>
+    <div class="header">
+      <img src="images/crystal-logo-stacked.png">
+      <h1>Devbox Launcher</h1> .
+      <h3>Launching Available Tools</h3>
+    </div>
+    <div class="content">
+      <fieldset>
+        <legend>Tools</legend>
+        <form action="/launch">
+          <button type="submit" name="tool" value="reference" title="Show Crystal Book (LanguageReference)">
+            <img src="images/crystal-icon.png">
+            <span style="display: block;">Language Reference</span>
+          </button>
+          <button type="submit" name="tool" value="api" title="Show Crystal API Documentation">
+            <img src="images/crystal-icon.png">
+            <span style="display: block;">API Documentation</span>
+          </button>
+          <button type="submit" name="tool" value="playground" title="Start Crystal Playground">
+            <img src="images/crystal-icon.png">
+            <span style="display: block;">Crystal Playground</span>
+          </button>
+          <button type="submit" name="tool" value="vscode" title="Start VSCode—IDE">
+            <img src="images/crystal-icon.png">
+            <span style="display: block;">Crystal Playground</span>
+          </button>
+        </form>
+      </fieldset>
+      <br>
+      <br>
+      <br>
+      <fieldset>
+        <legend>Logs</legend>
+        <pre><%=text_result%></pre>
+      </fieldset>
+    </div>
+    <div class="footer">
+      <p>Powered by Crystal/Kemal --- <%=VERSION%></p>
+    </div>
+  </body>
+</html>
