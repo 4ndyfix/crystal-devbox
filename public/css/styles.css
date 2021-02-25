@@ -9,20 +9,16 @@
   height: 100px;
 }
     
-.header h2 {
+.header h1 {
   position: relative;
   top: 14px;
-  left: 40px;
+  left: 60px;
 }
     
-.header h4 {
+.header h2 {
   position: relative;
-  top: 16px;
-  left: 10px;
-}
-    
-.header h8 {
-  position: right;
+  top: 0px;
+  left: 130px;
 }
     
 .header::after {
@@ -43,11 +39,11 @@
   position: relative;
   width: 98.5%;
 }
-    
+
 .footer p {
-  font-size: 8px;
+  font-size: 5px;
 }
-    
+   
 .not_found {
   text-align: center;
 }

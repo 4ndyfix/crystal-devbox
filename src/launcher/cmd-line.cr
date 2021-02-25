@@ -19,16 +19,16 @@ module DevboxLauncher
       #
       OptionParser.parse ARGV do |parser|
         parser.banner = "#{PROGRAM_NAME.upcase}\nUsage: #{PROGRAM_NAME}\n"
-        parser.on("-r", "--reference", "Open crystal book (language reference)") { @reference = true }
-        parser.on("-a", "--api", "Show crystal API documentation") { @api = true }
+        parser.on("-r", "--reference", "Open Crystal book (language reference)") { @reference = true }
+        parser.on("-a", "--api", "Show Crystal API documentation") { @api = true }
         parser.on("-p", "--playground", "Launch Crystal playground") { @playground = true }
         parser.on("--playground-port=PORT", "Crystal playground service port") { |val| opts[:playground_port] = val }
-        parser.on("-c", "--vscode", "Start VSCode IDE") { @vscode = true }
+        parser.on("-c", "--vscode", "Start VSCode Editor") { @vscode = true }
         parser.on("-n", "--no-colorize", "No colorized console output") { @colorize = false }
         parser.on("-l LEVEL", "--log-level=LEVEL", "Logging level as string") { |val| opts[:log_level] = val }
         parser.on("-b BROWSER", "--browser=BROWSER", "Which browser to use") { |val| opts[:browser] = val }
         parser.on("-s", "--show-config-only", "Show config only (instance vars)") { @show_config_only = true }
-        parser.on("-v", "--version", "Show crystal version info") { |val| puts VERSION; exit 0 }
+        parser.on("-v", "--version", "Show Crystal version info") { |val| puts VERSION; exit 0 }
         parser.on("-h", "--help", "Show this help") { |val| puts parser; exit 0 }
         parser.invalid_option do |flag|
           Log.error { "#{flag} is not a valid option! Try --help." }
@@ -45,12 +45,11 @@ module DevboxLauncher
       end
     end
 
-    def start_process(cmd : String, args : Array(String), secs : Number, working_dir = FileUtils.pwd) : Process | Nil
-      Log.debug { "Start new Process: cmd=#{cmd}, args=#{args}" }
+    def start_process(cmd : String, args : Array(String), working_dir = FileUtils.pwd) : Process | Nil
+      Log.debug { "Start new Process: cmd=#{cmd}, args=#{args}, working_dir=#{working_dir}" }
       result = nil
       Dir.cd working_dir do
         process = Process.new cmd, args
-        sleep secs # sec
         result = process if process.exists?
       end
       result
@@ -68,6 +67,23 @@ module DevboxLauncher
       response.status == HTTP::Status::OK
     end
 
+    def with_retries(max : Int32, &block : -> Bool) : Bool
+      success = block.call
+      unless success
+        1.upto max do |num|
+          sleep 1.0 # sec
+          success = block.call
+          if success
+            Log.debug { "Success for #{block} after #{num} retries." }
+            break
+          end
+        end
+      else
+        Log.debug { "Success for #{block} without any retries." }
+      end
+      success
+    end
+
     def instance_running?(command : String)
       result = `ps -eo pid,ppid,args | grep #{command} | grep -v grep`
       lines = result.lines
@@ -79,7 +95,7 @@ module DevboxLauncher
 
     def open_in_browser(url : String)
       Log.info { "Try to start #{@browser} browser ..." }
-      process = start_process @browser, ["#{url}"], 1.0
+      process = start_process @browser, ["#{url}"]
       if process
         Log.info { "Started a new #{@browser} process (pid=#{process.pid})." }
       else
@@ -93,19 +109,23 @@ module DevboxLauncher
     end
 
     def launch_reference
-      Log.info { "Try to start :Grystal =book/service oie" }
-      process = start_process "make", ["serve"], 5.0, working_dir: "/opt/crystal-book"
+      Log.info { "Try to start Crystal book process ..." }
+      process = start_process "make", ["serve"], working_dir: "/opt/crystal-book"
       if process
         Log.info { "Started a new Crystal book process (pid=#{process.pid})." }
       else
-        Log.warn { "Couldn't start a new Crystal book process - maybe already running, check socket ..." }
-        if server_socket_connectable? "localhost", 8000
-          Log.warn { "Crystal book is already running." }
-        else
-          Log.error { "Sorry, can't start a new book process!" }
-        end
+        Log.warn { "Couldn't start a new Crystal book process!" }
       end
-      if service_available? "localhost", 8000
+      #  
+      Log.info { "Try to connect Crystal book socket ..." }
+      if with_retries(10) { server_socket_connectable? "localhost", 8000 }
+        Log.info { "Crystal book socket is connectable." }
+      else
+        Log.error { "Sorry, Crystal book socket isn't connectable!" }
+      end
+      #
+      Log.info { "Check Crystal book service ..." }
+      if with_retries(3) { service_available? "localhost", 8000 }
         Log.info { "Crystal book service is available." }
       else
         Log.error { "Sorry, Crystal book service is not available!" }
@@ -113,8 +133,8 @@ module DevboxLauncher
     end
 
     def launch_playground
-      Log.info { "Try to start crystal playground service ..." }
-      process = start_process "crystal", ["play", "--port", @playground_port], 1.0
+      Log.info { "Try to start Crystal playground service ..." }
+      process = start_process "crystal", ["play", "--port", @playground_port]
       if process
         Log.info { "Started a new Crystal playgound process (pid=#{process.pid})." }
       else
@@ -122,7 +142,7 @@ module DevboxLauncher
         if server_socket_connectable? "localhost", @playground_port.to_i
           Log.warn { "Crystal playground is already running." }
         else
-          Log.error { "Sorry, can't start a new playgound process!" }
+          Log.error { "Sorry, can't start a new Crystal playgound process!" }
         end
       end
       if service_available? "localhost", @playground_port.to_i
@@ -133,8 +153,8 @@ module DevboxLauncher
     end
 
     def launch_vscode
-      Log.info { "Try te start VSGode IDE ...." }
-      process = start_process "/usr/bin/code", ["--disable-gpu", "--no-xshm"], 1.0
+      Log.info { "Try te start VSCode editor ...." }
+      process = start_process "/usr/bin/code", ["--disable-gpu", "--no-xshm"]
       if process
         Log.info { "Started a new VSCode process (pid=#{process.pid})." }
       else
@@ -148,7 +168,7 @@ module DevboxLauncher
         Log.info { "Launch Crystal book service (language reference) and open UI in browser tab ..." }
         Log.info { STAR_LINE }
         launch_reference
-        open_in_browser "http://localhost: 8000"
+        open_in_browser "http://localhost:8000"
       end
       if @api
         Log.info { STAR_LINE }
@@ -158,7 +178,7 @@ module DevboxLauncher
         if File.exists? docs_entrypoint
           open_in_browser "file://#{docs_entrypoint}"
         else
-          Log.error { "Sorry, file #{docs_entrypoint} is not available!" }
+          Log.error { "Sorry, doc's entrypoint file #{docs_entrypoint} is not available!" }
         end
       end
       if @playground

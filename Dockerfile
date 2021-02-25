@@ -25,7 +25,7 @@ ENV LC_ALL=en_US.UTF-8
 
 ARG DEBIAN_FRONTEND=noninteractive
 
-# crystal version via build arg or latest as default
+# crystal version via build arg
 ARG CRYSTAL_VERSION=${CRYSTAL_VERSION:-}
 
 ENV ADD_INSTALL_DIR=/opt
