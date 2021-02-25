@@ -133,19 +133,23 @@ module DevboxLauncher
     end
 
     def launch_playground
-      Log.info { "Try to start Crystal playground service ..." }
+      Log.info { "Try to start Crystal playground process ..." }
       process = start_process "crystal", ["play", "--port", @playground_port]
       if process
         Log.info { "Started a new Crystal playgound process (pid=#{process.pid})." }
       else
-        Log.warn { "Couldn't start a new Crystal playground process - maybe already running, check socket ..." }
-        if server_socket_connectable? "localhost", @playground_port.to_i
-          Log.warn { "Crystal playground is already running." }
-        else
-          Log.error { "Sorry, can't start a new Crystal playgound process!" }
-        end
+        Log.warn { "Couldn't start a new Crystal playground process!" }
       end
-      if service_available? "localhost", @playground_port.to_i
+      #
+      Log.info { "Try to connect Crystal playground socket ..." }
+      if with_retries(10) { server_socket_connectable? "localhost", @playground_port.to_i }
+        Log.info { "Crystal playground socket is connectable." }
+      else
+        Log.error { "Sorry, Crystal playgound socket isn't connectable!" }
+      end
+      #
+      Log.info { "Check Crystal playground service ..." }
+      if with_retries(3) { service_available? "localhost", @playground_port.to_i }
         Log.info { "Crystal playground service is available." }
       else
         Log.error { "Sorry, Crystal playground service is not available!" }
