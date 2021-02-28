@@ -4,7 +4,14 @@ require "ansi2html"
 
 module DevboxLauncher
   class WebService
+    Log = ::Log.for self.name
+    ::Log.setup :debug
+    BROWSER = "firefox"
+    PORT = 12345
+
     def self.up
+      Kemal.config.port = PORT
+      spawn try_open_ui(BROWSER, PORT)
       Kemal.run
     end
 
@@ -39,6 +46,23 @@ module DevboxLauncher
 
     error 404 do |env|
       render "public/views/not_found.ecr"
+    end
+
+    def self.try_open_ui(browser : String, port : Int32)
+      Log.info { "Try to connect Crystal devbox-launcher socket ..." }
+      if CmdLine.with_retries(10) { CmdLine.server_socket_connectable? "localhost", port }
+        Log.info { "Crystal devbox-launcher socket is connectable." }
+      else
+        Log.error { "Sorry, Crystal devbox-launcher socket isn't connectable!" }
+      end
+      #
+      Log.info { "Check Crystal devbox-launcher service ..." }
+      if CmdLine.with_retries(10) { CmdLine.service_available? "localhost", port }
+        Log.info { "Crystal devbox-launcher service is available." }
+      else
+        Log.error { "Sorry, Crystal devbox-launcher service is not available!" }
+      end
+      CmdLine.open_in_browser browser, "http://localhost:#{port}"
     end
   end
 end
