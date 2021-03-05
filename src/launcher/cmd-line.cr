@@ -37,7 +37,7 @@ module DevboxLauncher
       @colorize && ::Log::StaticFormatter.colorized = true
       @playground_port = opts[:playground_port]? || ENV["PLAYGROUND_PORT"]? || "48080"
       @log_level = opts[:log_level]? || ENV["LOG_LEVEL"]? || "DEBUG"
-      @browser = opts[:browser]? || ENV["BROWSER"]? || "firefox"
+      @browser = opts[:browser]? || ENV["BROWSER"]? || "/usr/bin/firefox"
       ::Log.setup ::Log::LEVEL[@log_level]
       @show_config_only && (pp self; true) && exit 0
       if @reference | @api | @playground | @vscode == false
@@ -45,19 +45,15 @@ module DevboxLauncher
       end
     end
 
-    def self.browser
-      @@browser
-    end
-
-    def self.start_process(cmd : String, args : Array(String), working_dir = FileUtils.pwd) : Process | Nil
-      Log.debug { "Start new Process: cmd=#{cmd}, args=#{args}, working_dir=#{working_dir}" }
-      result = nil
-      Dir.cd working_dir do
-        process = Process.new cmd, args
-        sleep 1.0
-        result = process if process.exists?
-      end
-      result
+    def self.daemonize(prog : String, params : Array(String), working_dir = FileUtils.pwd) : Bool
+      Log.debug { "Start new Process: prog=#{prog}, params=#{params}, working_dir=#{working_dir}" }
+      cmd = "start-stop-daemon"
+      args = ["--start", "--background", "--chdir", working_dir, "--exec", prog, "--"].concat params
+      output, error = IO::Memory.new, IO::Memory.new
+      status = Process.run cmd, args: args, output: output, error: error
+      stdout, stderr = output.to_s, error.to_s
+      Log.debug { "Process result stdout=#{stdout}, stderr=#{stderr}" }
+      status.success?
     end
 
     def self.server_socket_connectable?(host : String, port : Int32) : Bool
@@ -103,9 +99,9 @@ module DevboxLauncher
 
     def self.open_in_browser(browser : String, url : String)
       Log.info { "Try to start #{browser} browser ..." }
-      process = start_process browser, ["#{url}"]
+      process = daemonize browser, ["#{url}"]
       if process
-        Log.info { "Started a new #{browser} process (pid=#{process.pid})." }
+        Log.info { "Started a new #{browser} process." }
       else
         Log.warn { "Couldn't start a new #{browser} process - maybe already running, check instances ..." }
         if instance_running? browser
@@ -118,9 +114,9 @@ module DevboxLauncher
 
     def launch_reference
       Log.info { "Try to start Crystal book process ..." }
-      process = CmdLine.start_process "make", ["serve"], working_dir: "/opt/crystal-book"
+      process = CmdLine.daemonize "/usr/bin/make", ["serve"], working_dir: "/opt/crystal-book"
       if process
-        Log.info { "Started a new Crystal book process (pid=#{process.pid})." }
+        Log.info { "Started a new Crystal book process." }
       else
         Log.warn { "Couldn't start a new Crystal book process!" }
       end
@@ -142,9 +138,9 @@ module DevboxLauncher
 
     def launch_playground
       Log.info { "Try to start Crystal playground process ..." }
-      process = CmdLine.start_process "crystal", ["play", "--port", @playground_port]
+      process = CmdLine.daemonize "/usr/bin/crystal", ["play", "--port", @playground_port]
       if process
-        Log.info { "Started a new Crystal playgound process (pid=#{process.pid})." }
+        Log.info { "Started a new Crystal playgound process." }
       else
         Log.warn { "Couldn't start a new Crystal playground process!" }
       end
@@ -166,9 +162,9 @@ module DevboxLauncher
 
     def launch_vscode
       Log.info { "Try te start VSCode editor ...." }
-      process = CmdLine.start_process "/usr/bin/code", ["--disable-gpu", "--no-xshm"]
+      process = CmdLine.daemonize "/usr/bin/code", ["--disable-gpu", "--no-xshm"]
       if process
-        Log.info { "Started a new VSCode process (pid=#{process.pid})." }
+        Log.info { "Started a new VSCode process." }
       else
         Log.error { "Sorry, can't start a new VSCode process!" }
       end

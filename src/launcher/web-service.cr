@@ -4,8 +4,9 @@ require "ansi2html"
 
 module DevboxLauncher
   class WebService
-    Log = ::Log.for self.name
     ::Log.setup :debug
+    ::Log::StaticFormatter.colorized = true
+    Log = ::Log.for self.name
     BROWSER = "firefox"
     PORT = 12345
 
@@ -13,6 +14,9 @@ module DevboxLauncher
       Kemal.config.port = PORT
       spawn try_open_ui(BROWSER, PORT)
       Kemal.run
+    rescue exc : Socket::BindError # Address already in use 
+      Log.warn { "Launcher service is already running! - Try to open web UI anyway ..." }
+      sleep 2.0 # sec
     end
 
     get "/" do |env|
@@ -50,14 +54,14 @@ module DevboxLauncher
 
     def self.try_open_ui(browser : String, port : Int32)
       Log.info { "Try to connect Crystal devbox-launcher socket ..." }
-      if CmdLine.with_retries(10) { CmdLine.server_socket_connectable? "localhost", port }
+      if CmdLine.with_retries(5) { CmdLine.server_socket_connectable? "localhost", port }
         Log.info { "Crystal devbox-launcher socket is connectable." }
       else
         Log.error { "Sorry, Crystal devbox-launcher socket isn't connectable!" }
       end
       #
       Log.info { "Check Crystal devbox-launcher service ..." }
-      if CmdLine.with_retries(10) { CmdLine.service_available? "localhost", port }
+      if CmdLine.with_retries(5) { CmdLine.service_available? "localhost", port }
         Log.info { "Crystal devbox-launcher service is available." }
       else
         Log.error { "Sorry, Crystal devbox-launcher service is not available!" }
