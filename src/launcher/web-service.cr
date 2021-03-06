@@ -7,7 +7,7 @@ module DevboxLauncher
     ::Log.setup :debug
     ::Log::StaticFormatter.colorized = true
     Log = ::Log.for self.name
-    BROWSER = "firefox"
+    BROWSER = "/usr/bin/firefox"
     PORT = 12345
 
     def self.up

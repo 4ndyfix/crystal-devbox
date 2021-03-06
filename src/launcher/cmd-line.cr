@@ -51,9 +51,9 @@ module DevboxLauncher
       args = ["--start", "--background", "--chdir", working_dir, "--exec", prog, "--"].concat params
       output, error = IO::Memory.new, IO::Memory.new
       status = Process.run cmd, args: args, output: output, error: error
-      stdout, stderr = output.to_s, error.to_s
-      Log.debug { "Process result stdout=#{stdout}, stderr=#{stderr}" }
-      status.success?
+      success, stdout, stderr = status.success?, output.to_s, error.to_s
+      Log.debug { "Process success=#{success} stdout='#{stdout}', stderr='#{stderr}'" }
+      success
     end
 
     def self.server_socket_connectable?(host : String, port : Int32) : Bool
@@ -78,47 +78,33 @@ module DevboxLauncher
           sleep 1.0 # sec
           success = block.call
           if success
-            Log.debug { "Success for #{block} after #{num} retries." }
+            Log.debug { "Success for block after #{num} retries." }
             break
           end
         end
       else
-        Log.debug { "Success for #{block} without any retries." }
+        Log.debug { "Success for block without any retries." }
       end
       success
     end
 
-    def self.instance_running?(command : String)
-      result = `ps -eo pid,ppid,args | grep #{command} | grep -v grep`
-      lines = result.lines
-      lines.map! { |line| line.split(/\s+/)[0..6].join(" ") + "\n" }
-      details = lines.empty? ? "" : "\n" + lines.join.chomp
-      Log.debug { "Running instances=#{lines.size} for '#{command}'.#{details}" }
-      !lines.empty?
-    end
-
     def self.open_in_browser(browser : String, url : String)
       Log.info { "Try to start #{browser} browser ..." }
-      process = daemonize browser, ["#{url}"]
-      if process
+      success = daemonize browser, ["#{url}"]
+      if success
         Log.info { "Started a new #{browser} process." }
       else
-        Log.warn { "Couldn't start a new #{browser} process - maybe already running, check instances ..." }
-        if instance_running? browser
-          Log.warn { "Browser #{browser} is already running." }
-        else
-          Log.error { "Sorry, can't start a new #{browser} process!" }
-        end
+        Log.error { "Couldn't start a new #{browser} process!" }
       end
     end
 
     def launch_reference
       Log.info { "Try to start Crystal book process ..." }
-      process = CmdLine.daemonize "/usr/bin/make", ["serve"], working_dir: "/opt/crystal-book"
-      if process
+      success = CmdLine.daemonize "/usr/bin/make", ["serve"], working_dir: "/opt/crystal-book"
+      if success
         Log.info { "Started a new Crystal book process." }
       else
-        Log.warn { "Couldn't start a new Crystal book process!" }
+        Log.error { "Couldn't start a new Crystal book process!" }
       end
       #  
       Log.info { "Try to connect Crystal book socket ..." }
@@ -138,11 +124,11 @@ module DevboxLauncher
 
     def launch_playground
       Log.info { "Try to start Crystal playground process ..." }
-      process = CmdLine.daemonize "/usr/bin/crystal", ["play", "--port", @playground_port]
-      if process
+      success = CmdLine.daemonize "/usr/bin/crystal", ["play", "--port", @playground_port]
+      if success
         Log.info { "Started a new Crystal playgound process." }
       else
-        Log.warn { "Couldn't start a new Crystal playground process!" }
+        Log.error { "Couldn't start a new Crystal playground process!" }
       end
       #
       Log.info { "Try to connect Crystal playground socket ..." }
@@ -162,8 +148,8 @@ module DevboxLauncher
 
     def launch_vscode
       Log.info { "Try te start VSCode editor ...." }
-      process = CmdLine.daemonize "/usr/bin/code", ["--disable-gpu", "--no-xshm"]
-      if process
+      success = CmdLine.daemonize "/usr/bin/code", ["--disable-gpu", "--no-xshm"]
+      if success
         Log.info { "Started a new VSCode process." }
       else
         Log.error { "Sorry, can't start a new VSCode process!" }
