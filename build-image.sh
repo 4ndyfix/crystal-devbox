@@ -1,10 +1,11 @@
 #!/bin/bash
 set -e
 
+GIT_TAG=$(git describe)
 CRYSTAL_VERSION='0.36.1'
 
 NAME='crystal-devbox'
-TAG='0.9.0-'${CRYSTAL_VERSION}
+TAG=${GIT_TAG}'-'${CRYSTAL_VERSION}
 
 IMAGE_TAGGED=$NAME:$TAG
 IMAGE_LATEST=$NAME:latest

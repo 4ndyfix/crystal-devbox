@@ -78,12 +78,12 @@ module DevboxLauncher
           sleep 1.0 # sec
           success = block.call
           if success
-            Log.debug { "Success for block after #{num} retries." }
+            Log.debug { "Success for code block after #{num} retries." }
             break
           end
         end
       else
-        Log.debug { "Success for block without any retries." }
+        Log.debug { "Success for code block without any retries." }
       end
       success
     end
@@ -108,7 +108,7 @@ module DevboxLauncher
       end
       #  
       Log.info { "Try to connect Crystal book socket ..." }
-      if CmdLine.with_retries(10) { CmdLine.server_socket_connectable? "localhost", 8000 }
+      if CmdLine.with_retries(30) { CmdLine.server_socket_connectable? "localhost", 8000 }
         Log.info { "Crystal book socket is connectable." }
       else
         Log.error { "Sorry, Crystal book socket isn't connectable!" }
@@ -147,8 +147,12 @@ module DevboxLauncher
     end
 
     def launch_vscode
-      Log.info { "Try te start VSCode editor ...." }
-      success = CmdLine.daemonize "/usr/bin/code", ["--disable-gpu", "--no-xshm"]
+      Log.info { "Try to start VSCode editor ...." }
+      success = CmdLine.daemonize "/usr/bin/code", [
+        "--disable-gpu",
+        "--no-xshm",
+        "--extensions-dir", "/opt/vscode-extensions" 
+      ]
       if success
         Log.info { "Started a new VSCode process." }
       else

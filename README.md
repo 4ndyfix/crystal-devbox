@@ -25,7 +25,7 @@ only the prompt of the shell is changing (starts with a whale and ends with a ge
 
 The Docker container starts with several Linux-specific bind mounts. Therefore it's very unlikely that it works on MacOS or Windows.
 
-Ok, the Docker image is not the smallest (2.1GB), but it is as small as possible by build ;-)
+Ok, the Docker image is not the smallest (~2GB), but it is as small as possible by build ;-)
 
 
 ## Installation

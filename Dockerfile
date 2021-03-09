@@ -1,21 +1,3 @@
-# Multistage Dockerfile
-
-#FROM crystallang/crystal:0.36.1-alpine as builder
-#WORKDIR /tmp
-#COPY . .
-
-#RUN crystal build --release --static src/launcher.cr -o bin/launcher
-
-
-###RUN mkdir /app
-
-###WORKDIR /app
-
-###COPY --from=builder /tmp/bin/launcher /usr/local/bin/launcher
-###COPY --from=builder /tmp/public /app/public
-
-#----------------------------------------
-
 FROM ubuntu:20.04
 WORKDIR /tmp
 
@@ -32,7 +14,7 @@ ENV ADD_INSTALL_DIR=/opt
 
 ENV VSCODE_EXTENSIONS_DIR=$ADD_INSTALL_DIR/vscode-extensions
 ENV VSCODE_EXTENSIONS_LATEST="\
-  faustinoaq.crystal-lang \
+  crystal-lang-tools.crystal-lang \
   formulahendry.code-runner \
   PKief.material-icon-theme"
 
@@ -41,6 +23,7 @@ ENV VSCODE_EXTENSIONS_SPECIFIC="\
 
 ENV CRYSTAL_BOOK_DIR=$ADD_INSTALL_DIR/crystal-book
 
+COPY . .
 COPY scripts/* /usr/local/bin/
 COPY --from=docker:19.03 /usr/local/bin/docker /usr/local/bin/
 ADD vscode-lldb/crystal-formatters.tgz $ADD_INSTALL_DIR/
@@ -107,7 +90,7 @@ RUN apt-get update && apt-get install -y \
     /usr/bin/code --install-extension $EXT --extensions-dir $VSCODE_EXTENSIONS_DIR --user-data-dir /tmp; done \
   && for EXT in $VSCODE_EXTENSIONS_SPECIFIC; do \
     wget -q $EXT && \
-    /usr/bin/code --install-extension $(basename $EXT) --extensions-dir $VSCODE_EXTENSIONS_DIR --user-data-dir /tmp; done \
+    /usr/bin/code --install-extension $(basename $EXT) --extensions-dir $VSCODE_EXTENSIONS_DIR --user-data-dir /tmp; rm $(basename $EXT); done \
   # \
   # ------------------------------------------\
   # install latest language server crystalline \
@@ -116,7 +99,21 @@ RUN apt-get update && apt-get install -y \
   && wget -q https://github.com/elbywan/crystalline/releases/latest/download/crystalline_x86_64-unknown-linux-gnu.gz -O crystalline.gz \
   && gzip -d crystalline.gz \
   && chmod 755 crystalline \
+  # \
+  # -----------------------------------\
+  # build & install devbox-launcher app \
+  # -------------------------------------\ 
+  && cd /tmp \
+  && echo "Building devbox-launcher app, please wait ..." \
+  && crystal build --release src/launcher.cr -o /usr/local/bin/launcher \
+  && mkdir /app \
+  && cp -r public /app \
+  # \
+  # ---------------\
+  # finally cleanup \
+  # -----------------\ 
   && rm -rf /tmp/* \
+  && rm -rf /tmp/.git* \
   && rm -rf /var/lib/apt/lists/*
 
 CMD entrypoint.sh
