@@ -27,24 +27,48 @@ The Docker container starts with several Linux-specific bind mounts. Therefore i
 
 Ok, the Docker image is not the smallest (~2GB), but it is as small as possible by build ;-)
 
-
-## Installation
-
-
-### Requirements
+## Requirements
 
 * A Linux OS
-* Docker 19.03.x
+* Docker >19.03.x
 
+## Build
+
+Build the Docker image for yourself by running the bash script ``./build-image.sh``. Inside set the wanted
+**CRYSTAL_VERSION** before. After that the Docker image can be transfered by ``docker save/load`` as a tar file.
 
 ## Usage
 
-Build the Docker image by running the shell script **build-image.sh**.
-Start the Crystal devbox by running the shell script **run-crystal-devbox.sh**. 
+Start the Crystal devbox by running the shell script ``./run-crystal-devbox.sh`` in a terminal.
+Now you are inside the Crystal devbox (in the running Docker container). The shell prompt has changed. Next you can start tools by commandline (CLI) or via a small Kemal-webservice & Firefox browser (UI).
 
-## Development
+### CLI
 
-TODO: Write development instructions here
+Run the devbox-launcher binary ``launcher -h``. Available options are:
+```code
+-r, --reference                  Open Crystal book (language reference)
+-a, --api                        Show Crystal API documentation
+-p, --playground                 Launch Crystal playground
+--playground-port=PORT           Crystal playground service port
+-c, --vscode                     Start VSCode Editor
+-n, --no-colorize                No colorized console output
+-l LEVEL, --log-level=LEVEL      Logging level as string
+-b BROWSER, --browser=BROWSER    Which browser to use
+-s, --show-config-only           Show config only (instance vars)
+-v, --version                    Show Crystal version info
+-h, --help                       Show this help
+```
+
+### UI
+
+Run the devbox-launcher shell script ``launcher-ui.sh``. It starts the devbox-launcher binary
+``launcher`` in UI mode. This means a Kemal-service is running now and a Firefox browser comes up
+as UI.
+
+### Caveats
+
+* Launching the Language Reference (a.k.a. Crystal book) for the first time can take up to 20 seconds. So please wait ...
+
 
 ## Contributing
 

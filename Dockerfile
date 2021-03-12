@@ -1,14 +1,26 @@
+# Multistage Dockerfile
+
+FROM crystallang/crystal:0.36.1 as builder
+WORKDIR /tmp
+
+ARG CRYSTAL_VERSION=${CRYSTAL_VERSION:-}
+COPY . .
+
+RUN shards install \
+ && echo "Building devbox-launcher app, please wait ..." \
+ && crystal build --release --static src/launcher.cr -o bin/launcher
+
+#---------------------------------------------------------------------
+
 FROM ubuntu:20.04
 WORKDIR /tmp
+
+ARG CRYSTAL_VERSION=${CRYSTAL_VERSION:-}
+ARG DEBIAN_FRONTEND=noninteractive
 
 ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US.UTF-8
 ENV LC_ALL=en_US.UTF-8
-
-ARG DEBIAN_FRONTEND=noninteractive
-
-# crystal version via build arg
-ARG CRYSTAL_VERSION=${CRYSTAL_VERSION:-}
 
 ENV ADD_INSTALL_DIR=/opt
 
@@ -23,7 +35,8 @@ ENV VSCODE_EXTENSIONS_SPECIFIC="\
 
 ENV CRYSTAL_BOOK_DIR=$ADD_INSTALL_DIR/crystal-book
 
-COPY . .
+COPY --from=builder /tmp/bin/launcher /usr/local/bin/launcher
+COPY --from=builder /tmp/public /app/public
 COPY scripts/* /usr/local/bin/
 COPY --from=docker:19.03 /usr/local/bin/docker /usr/local/bin/
 ADD vscode-lldb/crystal-formatters.tgz $ADD_INSTALL_DIR/
@@ -100,20 +113,10 @@ RUN apt-get update && apt-get install -y \
   && gzip -d crystalline.gz \
   && chmod 755 crystalline \
   # \
-  # -----------------------------------\
-  # build & install devbox-launcher app \
-  # -------------------------------------\ 
-  && cd /tmp \
-  && echo "Building devbox-launcher app, please wait ..." \
-  && crystal build --release src/launcher.cr -o /usr/local/bin/launcher \
-  && mkdir /app \
-  && cp -r public /app \
-  # \
   # ---------------\
   # finally cleanup \
   # -----------------\ 
   && rm -rf /tmp/* \
-  && rm -rf /tmp/.git* \
   && rm -rf /var/lib/apt/lists/*
 
 CMD entrypoint.sh
