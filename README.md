@@ -34,10 +34,10 @@ Ok, the Docker image is not the smallest (~2GB), but it is as small as possible 
 
 ## Build
 
-Build the Docker image for yourself by running the bash script ``./build-image.sh``. Inside set the wanted
-**CRYSTAL_VERSION** before. After that the Docker image can be transfered by ``docker save/load`` as a tar file.
+Build the Docker image for yourself by running the bash script ``./build-image.sh``. Inside set the wanted **CRYSTAL_VERSION** before. The build can take several minutes.
+After that the Docker image can be transfered by ``docker save/load`` as a tar file.
 
-## Usage
+## Run
 
 Start the Crystal devbox by running the shell script ``./run-crystal-devbox.sh`` in a terminal.
 Now you are inside the Crystal devbox (in the running Docker container). The shell prompt has changed. Next you can start tools by commandline (CLI) or via a small Kemal-webservice & Firefox browser (UI).
@@ -67,8 +67,10 @@ as UI.
 
 ### Caveats
 
-* Launching the Language Reference (a.k.a. Crystal book) for the first time can take up to 20 seconds. So please wait ...
-
+* Launching the Language Reference (a.k.a. Crystal book) for the first time can take up to 20 seconds. So please wait ... or try again.
+* The crystal-devbox was originally developed on Ubuntu 20.04 LTS with Docker 19.03.x.  
+Build and run of the image was also manually tested on Centos 7.9 with Docker 20.10.5.
+in a Virtualbox.
 
 ## Contributing
 
