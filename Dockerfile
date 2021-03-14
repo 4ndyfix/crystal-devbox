@@ -6,7 +6,8 @@ WORKDIR /tmp
 ARG CRYSTAL_VERSION=${CRYSTAL_VERSION:-}
 COPY . .
 
-RUN shards install \
+RUN mkdir bin \
+ && shards install \
  && echo "Building devbox-launcher app, please wait ..." \
  && crystal build --release --static src/launcher.cr -o bin/launcher
 

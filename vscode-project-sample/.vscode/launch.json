@@ -11,7 +11,7 @@
       "cwd": "${workspaceFolder}",
       "initCommands": [
         "command script import /opt/crystal/etc/lldb/crystal_formatters.py"
-      ],
+      ]
     }
   ]
 }
