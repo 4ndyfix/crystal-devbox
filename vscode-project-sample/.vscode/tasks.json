@@ -2,10 +2,11 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "crystal: build current file (debug)",
+      "label": "build",
       "type": "shell",
-      "command": "crystal build --debug ${relativeFile} -o bin/${fileBasenameNoExtension}"
+      "command": "/usr/bin/crystal build --stats --debug ${relativeFile} -o bin/${fileBasenameNoExtension}",
+      "problemMatcher": []
     }
-  ]
+  ],
 }
 
