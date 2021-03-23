@@ -1,9 +1,9 @@
 # Multistage Dockerfile
 
-FROM crystallang/crystal:0.36.1 as builder
-WORKDIR /tmp
-
 ARG CRYSTAL_VERSION=${CRYSTAL_VERSION:-}
+FROM crystallang/crystal:$CRYSTAL_VERSION as builder
+
+WORKDIR /tmp
 COPY . .
 
 RUN mkdir -p ./bin \
@@ -113,6 +113,14 @@ RUN apt-get update && apt-get install -y \
   && wget -q https://github.com/elbywan/crystalline/releases/latest/download/crystalline_x86_64-unknown-linux-gnu.gz -O crystalline.gz \
   && gzip -d crystalline.gz \
   && chmod 755 crystalline \
+  # \
+  # ---------------------------------\
+  # install ICR (Interactive Crystal) \
+  # -----------------------------------\ 
+  && cd /tmp \
+  && git clone https://github.com/crystal-community/icr.git \
+  && cd icr \
+  && make && make install \
   # \
   # ---------------\
   # finally cleanup \

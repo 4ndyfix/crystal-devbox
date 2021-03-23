@@ -8,7 +8,7 @@ on Linux.
 
 The Docker image contains Crystal itself (compiler, playground, etc.),
 the API documentation, the crystal-book (language reference), the VSCode editor,
-some vsix extensions and the language server crystalline.
+some vsix extensions, the language server crystalline and ICR (Interactive Crystal).
 Further some important development packages and commandline tools (e.g. git, gcc, make)
 are also available inside (look at Dockerfile).  
 
@@ -34,13 +34,14 @@ Ok, the Docker image is not the smallest (~2GB), but it is as small as possible 
 
 ## Build
 
-Build the Docker image for yourself by running the bash script ``./build-image.sh``. Inside set the wanted **CRYSTAL_VERSION** before. The build can take several minutes.
+Build the Docker image for yourself by running the bash script ``./build-image.sh``. Inside set the wanted ``CRYSTAL_VERSION`` before. The build can take several minutes.
 After that the Docker image can be transfered by ``docker save/load`` as a tar file.
 
 ## Run
 
 Start the Crystal devbox by running the shell script ``./run-crystal-devbox.sh`` in a terminal.
 Now you are inside the Crystal devbox (in the running Docker container). The shell prompt has changed. Next you can start tools by commandline (CLI) or via a small Kemal-webservice & Firefox browser (UI).
+**Before ussing CLI or UI it is urgently needed to close an outside running Firefox browser!**.
 
 ### CLI
 
@@ -65,8 +66,9 @@ Run the devbox-launcher shell script ``launcher-ui.sh``. It starts the devbox-la
 ``launcher`` in UI mode. This means a Kemal-service is running now and a Firefox browser comes up
 as UI.
 
-### Caveats
-
+## Hints
+* Before ussing CLI or UI it is urgently needed to close an outside running Firefox browser.
+This is because Firefox will be launched with a File-based URL for API documentation. 
 * Launching the Language Reference (a.k.a. Crystal book) for the first time can take up to 20 seconds. So please wait ... or try again.
 * The crystal-devbox was originally developed on Ubuntu 20.04 LTS with Docker 19.03.x.  
 Build and run of the image was also manually tested on Centos 7.9 with Docker 20.10.5.
