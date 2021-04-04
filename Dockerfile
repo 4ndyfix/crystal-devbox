@@ -25,13 +25,13 @@ ENV LC_ALL=en_US.UTF-8
 
 ENV ADD_INSTALL_DIR=/opt
 
-ENV VSCODE_EXTENSIONS_DIR=$ADD_INSTALL_DIR/vscode-extensions
-ENV VSCODE_EXTENSIONS_LATEST="\
+ENV VSCODIUM_EXTENSIONS_DIR=$ADD_INSTALL_DIR/vscodium-extensions
+ENV VSCODIUM_EXTENSIONS_LATEST="\
   crystal-lang-tools.crystal-lang \
   formulahendry.code-runner \
   PKief.material-icon-theme"
 
-ENV VSCODE_EXTENSIONS_SPECIFIC="\
+ENV VSCODIUM_EXTENSIONS_SPECIFIC="\
   https://github.com/vadimcn/vscode-lldb/releases/download/v1.6.1/codelldb-x86_64-linux.vsix"
 
 ENV CRYSTAL_BOOK_DIR=$ADD_INSTALL_DIR/crystal-book
@@ -52,7 +52,7 @@ RUN apt-get update && apt-get install -y \
   # -------------------\
   # suitable misc tools \
   # ---------------------\
-  locales fontconfig bash-completion firefox vim mc python3-venv \
+  locales fontconfig bash-completion firefox vim mc python3-venv apt-utils \
   zip unzip tar file \
   wget curl gnupg iputils-ping net-tools openssh-client \
   # \
@@ -91,20 +91,18 @@ RUN apt-get update && apt-get install -y \
   && git clone https://github.com/crystal-lang/crystal-book $CRYSTAL_BOOK_DIR \
   && chmod 777 $CRYSTAL_BOOK_DIR \
   # \
-  # ----------------------------------------------\
-  # install latest stable VSCode & some extensions \
   # ------------------------------------------------\
-  && wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg \
-  && install -o root -g root -m 644 packages.microsoft.gpg /etc/apt/trusted.gpg.d/ \
-  && sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/trusted.gpg.d/packages.microsoft.gpg] \
-    https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list' \
-  && apt-get update && apt-get install -y code \
-  && mkdir $VSCODE_EXTENSIONS_DIR \
-  && for EXT in $VSCODE_EXTENSIONS_LATEST; do \
-    /usr/bin/code --install-extension $EXT --extensions-dir $VSCODE_EXTENSIONS_DIR --user-data-dir /tmp; done \
-  && for EXT in $VSCODE_EXTENSIONS_SPECIFIC; do \
+  # install latest stable VSCodium & some extensions \
+  # --------------------------------------------------\
+  && wget -qO - https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg | gpg --dearmor | dd of=/etc/apt/trusted.gpg.d/vscodium.gpg \
+  && echo 'deb https://paulcarroty.gitlab.io/vscodium-deb-rpm-repo/debs/ vscodium main' | tee --append /etc/apt/sources.list.d/vscodium.list \
+  && apt-get update && apt-get install -y codium \
+  && mkdir $VSCODIUM_EXTENSIONS_DIR \
+  && for EXT in $VSCODIUM_EXTENSIONS_LATEST; do \
+    /usr/bin/codium --install-extension $EXT --extensions-dir $VSCODIUM_EXTENSIONS_DIR --user-data-dir /tmp; done \
+  && for EXT in $VSCODIUM_EXTENSIONS_SPECIFIC; do \
     wget -q $EXT && \
-    /usr/bin/code --install-extension $(basename $EXT) --extensions-dir $VSCODE_EXTENSIONS_DIR --user-data-dir /tmp; rm $(basename $EXT); done \
+    /usr/bin/codium --install-extension $(basename $EXT) --extensions-dir $VSCODIUM_EXTENSIONS_DIR --user-data-dir /tmp; rm $(basename $EXT); done \
   # \
   # ------------------------------------------\
   # install latest language server crystalline \
@@ -120,6 +118,7 @@ RUN apt-get update && apt-get install -y \
   && cd /tmp \
   && git clone https://github.com/crystal-community/icr.git \
   && cd icr \
+  && sed -i -E 's/( build )/ --ignore-crystal-version\1/' Makefile \
   && make && make install \
   # \
   # ---------------\

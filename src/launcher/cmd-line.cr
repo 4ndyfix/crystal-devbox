@@ -13,7 +13,7 @@ module DevboxLauncher
     STAR_LINE = "*" * 80
 
     def initialize
-      @reference, @api, @playground, @vscode = false, false, false, false
+      @reference, @api, @playground, @vscodium = false, false, false, false
       @show_config_only, @colorize = false, true
       opts = {} of Symbol => String
       #
@@ -23,7 +23,7 @@ module DevboxLauncher
         parser.on("-a", "--api", "Show Crystal API documentation") { @api = true }
         parser.on("-p", "--playground", "Launch Crystal playground") { @playground = true }
         parser.on("--playground-port=PORT", "Crystal playground service port") { |val| opts[:playground_port] = val }
-        parser.on("-c", "--vscode", "Start VSCode Editor") { @vscode = true }
+        parser.on("-c", "--vscodium", "Start VSCodium Editor") { @vscodium = true }
         parser.on("-n", "--no-colorize", "No colorized console output") { @colorize = false }
         parser.on("-l LEVEL", "--log-level=LEVEL", "Logging level as string") { |val| opts[:log_level] = val }
         parser.on("-b BROWSER", "--browser=BROWSER", "Which browser to use") { |val| opts[:browser] = val }
@@ -40,7 +40,7 @@ module DevboxLauncher
       @browser = opts[:browser]? || ENV["BROWSER"]? || "/usr/bin/firefox"
       ::Log.setup ::Log::LEVEL[@log_level]
       @show_config_only && (pp self; true) && exit 0
-      if @reference | @api | @playground | @vscode == false
+      if @reference | @api | @playground | @vscodium == false
         Log.warn { "Sorry, nothing to launch! Try --help." }
       end
     end
@@ -146,17 +146,17 @@ module DevboxLauncher
       end
     end
 
-    def launch_vscode
-      Log.info { "Try to start VSCode editor ...." }
-      success = CmdLine.daemonize "/usr/bin/code", [
+    def launch_vscodium
+      Log.info { "Try to start VSCodium editor ...." }
+      success = CmdLine.daemonize "/usr/bin/codium", [
         "--disable-gpu",
         "--no-xshm",
-        "--extensions-dir", "/opt/vscode-extensions" 
+        "--extensions-dir", "/opt/vscodium-extensions" 
       ]
       if success
-        Log.info { "Started a new VSCode process." }
+        Log.info { "Started a new VSCodium process." }
       else
-        Log.error { "Sorry, can't start a new VSCode process!" }
+        Log.error { "Sorry, can't start a new VSCodium process!" }
       end
     end
 
@@ -186,11 +186,11 @@ module DevboxLauncher
         launch_playground
         CmdLine.open_in_browser @browser, "http://localhost:#{@playground_port}"
       end
-      if @vscode
+      if @vscodium
         Log.info { STAR_LINE }
-        Log.info { "Launch VSCode IDE (extensions for Crystal already available)..." }
+        Log.info { "Launch VSCodium IDE (extensions for Crystal already available)..." }
         Log.info { STAR_LINE }
-        launch_vscode
+        launch_vscodium
       end
     rescue exc : Exception
       Log.fatal(exception: exc) { "Bad situation!" }

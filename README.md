@@ -7,14 +7,14 @@ crystal-devbox is a completely dockerized development environment for the Crysta
 on Linux.
 
 The Docker image contains Crystal itself (compiler, playground, etc.),
-the API documentation, the crystal-book (language reference), the VSCode editor,
-some vsix extensions, the language server crystalline and ICR (Interactive Crystal).
+the API documentation, the crystal-book (language reference), the VSCodium editor,
+some OpenVSX-extensions (vsix), the language server crystalline and ICR (Interactive Crystal).
 Further some important development packages and commandline tools (e.g. git, gcc, make)
 are also available inside (look at Dockerfile).  
 
 The basic idea behind was to have a completely bundled development environment
 for using offline or behind a firewall. 
-The running Docker container includes enough X11 stuff for launching UI tools (Firefox & VSCode).
+The running Docker container includes enough X11 stuff for launching UI tools (Firefox & VSCodium).
 
 Basically all necessary programs, tools and packages are living inside the image/container.
 However all projects, configurations and other data are awaited outside below the $HOME
@@ -51,7 +51,7 @@ Run the devbox-launcher binary ``launcher -h``. Available options are:
 -a, --api                        Show Crystal API documentation
 -p, --playground                 Launch Crystal playground
 --playground-port=PORT           Crystal playground service port
--c, --vscode                     Start VSCode Editor
+-c, --vscodium                   Start VSCodium Editor
 -n, --no-colorize                No colorized console output
 -l LEVEL, --log-level=LEVEL      Logging level as string
 -b BROWSER, --browser=BROWSER    Which browser to use
@@ -73,6 +73,11 @@ This is because Firefox will be launched with a File-based URL for API documenta
 * The crystal-devbox was originally developed on Ubuntu 20.04 LTS with Docker 19.03.x.  
 Build and run of the image was also manually tested on Centos 7.9 with Docker 20.10.5.
 in a Virtualbox.
+* VSCodium & OpenVSX instead of VSCode is added, because of free sources **and** free binaries.
+* The directory ``vscodium-simple-project-sample`` includes a subdirectory ``.vscode`` with examples
+for ``settings.json``, ``tasks.json`` and ``launch.json`` as templates for other projects.
+* Debugger support (vscode-lldb extension) works sometimes - but only for simple code fragments.
+Sometimes VSCodium hangs or crashes by starting the debugger ("early stage").   
 
 ## Contributing
 

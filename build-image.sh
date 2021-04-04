@@ -2,7 +2,7 @@
 set -e
 
 GIT_TAG=$(git describe)
-CRYSTAL_VERSION='0.36.1'
+CRYSTAL_VERSION='1.0.0'
 
 NAME='crystal-devbox'
 TAG=${GIT_TAG}'-'${CRYSTAL_VERSION}
