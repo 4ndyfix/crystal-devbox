@@ -41,7 +41,8 @@ After that the Docker image can be transfered by ``docker save/load`` as a tar f
 
 Start the Crystal devbox by running the shell script ``./run-crystal-devbox.sh`` in a terminal.
 Now you are inside the Crystal devbox (in the running Docker container). The shell prompt has changed. Next you can start tools by commandline (CLI) or via a small Kemal-webservice & Firefox browser (UI).
-**Before ussing CLI or UI it is urgently needed to close an outside running Firefox browser!**.
+* **Before ussing CLI or UI it is urgently needed to close an outside running Firefox browser!**
+* **Before launching anything it is recommended to read [this](#hints-&-experience) below.**
 
 ### CLI
 
@@ -66,18 +67,25 @@ Run the devbox-launcher shell script ``launcher-ui.sh``. It starts the devbox-la
 ``launcher`` in UI mode. This means a Kemal-service is running now and a Firefox browser comes up
 as UI.
 
-## Hints
+## Hints & Experience
 * Before ussing CLI or UI it is urgently needed to close an outside running Firefox browser.
 This is because Firefox will be launched with a File-based URL for API documentation. 
-* Launching the Language Reference (a.k.a. Crystal book) for the first time can take up to 20 seconds. So please wait ... or try again.
+* Launching the Language Reference (a.k.a. Crystal book) for the first time can take up to 25 seconds. So please wait ... or try again.
 * The crystal-devbox was originally developed on Ubuntu 20.04 LTS with Docker 19.03.x.  
 Build and run of the image was also manually tested on Centos 7.9 with Docker 20.10.5.
 in a Virtualbox.
-* VSCodium & OpenVSX instead of VSCode is added, because of free sources **and** free binaries.
-* The directory ``vscodium-simple-project-sample`` includes a subdirectory ``.vscode`` with examples
-for ``settings.json``, ``tasks.json`` and ``launch.json`` as templates for other projects.
-* Debugger support (vscode-lldb extension) works sometimes - but only for simple code fragments.
-Sometimes VSCodium hangs or crashes by starting the debugger ("early stage").   
+* VSCodium (VSCode)
+  * VSCodium & OpenVSX instead of VSCode is added, because of free sources **and** free binaries.
+  * User settings are found below ``$HOME/.config/VSCodium``. Older existing settings should be moved (saved)
+    or removed before.
+  * Extensions are installed inside the Docker container in a specific directory while building the Docker image.
+    It is not provided to install extensions additionally later.
+  * Please use the launcher (CLI or UI) to start VSCodium, because specific options are used.
+  * The directory ``vscodium-simple-project-sample`` includes a subdirectory ``.vscode`` with examples
+    for ``settings.json``, ``tasks.json`` and ``launch.json`` as templates for other projects.
+  * Debugger support (vscode-lldb extension) works sometimes - but only for simple code fragments.
+    Sometimes VSCodium hangs or crashes by starting the debugger (Crystal debugging is in an "early stage").
+
 
 ## Contributing
 

@@ -1,0 +1,10 @@
+{
+    "crystal-lang.server": "/usr/local/bin/crystalline",
+    "crystal-lang.compiler": "/usr/bin/crystal",
+    "crystal-lang.shards": "/usr/bin/shards",
+    "code-runner.clearPreviousOutput": true,
+    "code-runner.runInTerminal": true,
+    "code-runner.saveAllFilesBeforeRun": true,
+    "code-runner.saveFileBeforeRun": true,
+    "code-runner.enableAppInsights": false
+}
