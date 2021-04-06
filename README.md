@@ -42,7 +42,7 @@ After that the Docker image can be transfered by ``docker save/load`` as a tar f
 Start the Crystal devbox by running the shell script ``./run-crystal-devbox.sh`` in a terminal.
 Now you are inside the Crystal devbox (in the running Docker container). The shell prompt has changed. Next you can start tools by commandline (CLI) or via a small Kemal-webservice & Firefox browser (UI).
 * **Before ussing CLI or UI it is urgently needed to close an outside running Firefox browser!**
-* **Before launching anything it is recommended to read [this](#hints-&-experience) below.**
+* **Before launching anything it is recommended to read [Hints & Experience](#hints-&-experience) below.**
 
 ### CLI
 
@@ -83,6 +83,8 @@ in a Virtualbox.
   * Please use the launcher (CLI or UI) to start VSCodium, because specific options are used.
   * The directory ``vscodium-simple-project-sample`` includes a subdirectory ``.vscode`` with examples
     for ``settings.json``, ``tasks.json`` and ``launch.json`` as templates for other projects.
+  * The language server Crystalline is available at ``/usr/local/bin/crystalline``.
+    Don't forget to update the workspace ``settings.json``.
   * Debugger support (vscode-lldb extension) works sometimes - but only for simple code fragments.
     Sometimes VSCodium hangs or crashes by starting the debugger (Crystal debugging is in an "early stage").
 
