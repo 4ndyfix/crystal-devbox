@@ -8,7 +8,7 @@ on Linux.
 
 The Docker image contains Crystal itself (compiler, playground, etc.),
 the API documentation, the crystal-book (language reference), the VSCodium editor,
-some OpenVSX-extensions (vsix), the language server crystalline and ICR (Interactive Crystal).
+some OpenVSX-extensions (vsix), the language server Crystalline and ICR (Interactive Crystal).
 Further some important development packages and commandline tools (e.g. git, gcc, make)
 are also available inside (look at Dockerfile).  
 
@@ -25,7 +25,7 @@ only the prompt of the shell is changing (starts with a whale and ends with a ge
 
 The Docker container starts with several Linux-specific bind mounts. Therefore it's very unlikely that it works on MacOS or Windows.
 
-Ok, the Docker image is not the smallest (~2GB), but it is as small as possible by build ;-)
+Okay, the Docker image is not the smallest (~2GB), but it is as small as possible by build ;-)
 
 ## Requirements
 
@@ -34,7 +34,7 @@ Ok, the Docker image is not the smallest (~2GB), but it is as small as possible 
 
 ## Build
 
-Build the Docker image for yourself by running the bash script ``./build-image.sh``. Inside set the wanted ``CRYSTAL_VERSION`` before. The build can take several minutes.
+Build the Docker image for yourself online by running the bash script ``./build-image.sh``. Inside set the wanted ``CRYSTAL_VERSION`` before. The build can take several minutes.
 After that the Docker image can be transfered by ``docker save/load`` as a tar file.
 
 ## Run
@@ -55,7 +55,6 @@ Run the devbox-launcher binary ``launcher -h``. Available options are:
 -c, --vscodium                   Start VSCodium Editor
 -n, --no-colorize                No colorized console output
 -l LEVEL, --log-level=LEVEL      Logging level as string
--b BROWSER, --browser=BROWSER    Which browser to use
 -s, --show-config-only           Show config only (instance vars)
 -v, --version                    Show Crystal version info
 -h, --help                       Show this help
@@ -69,11 +68,12 @@ as UI.
 
 ## Hints & Experience
 * Before ussing CLI or UI it is urgently needed to close an outside running Firefox browser.
-This is because Firefox will be launched with a File-based URL for API documentation. 
-* Launching the Language Reference (a.k.a. Crystal book) for the first time can take up to 25 seconds. So please wait ... or try again.
+  This is because Firefox will be launched with a File-based URL for API documentation. 
+* Launching the Language Reference (a.k.a. Crystal book) for the first time can take up to 25 seconds.
+  So please wait ... or try again.
 * The crystal-devbox was originally developed on Ubuntu 20.04 LTS with Docker 19.03.x.  
-Build and run of the image was also manually tested on Centos 7.9 with Docker 20.10.5.
-in a Virtualbox.
+  Build and run of the image was also manually tested on Centos 7.9 with Docker 20.10.5.
+  in a Virtualbox.
 * VSCodium (VSCode)
   * VSCodium & OpenVSX instead of VSCode is added, because of free sources **and** free binaries.
   * User settings are found below ``$HOME/.config/VSCodium``. Older existing settings should be moved (saved)
@@ -81,13 +81,12 @@ in a Virtualbox.
   * Extensions are installed inside the Docker container in a specific directory while building the Docker image.
     It is not provided to install extensions additionally later.
   * Please use the launcher (CLI or UI) to start VSCodium, because specific options are used.
-  * The directory ``vscodium-simple-project-sample`` includes a subdirectory ``.vscode`` with examples
-    for ``settings.json``, ``tasks.json`` and ``launch.json`` as templates for other projects.
+  * The subdirectory ``.vscode`` contains the workspace (project) configuration files ``settings.json``, ``tasks.json``
+    and ``launch.json`` used for language server and debugging.
   * The language server Crystalline is available at ``/usr/local/bin/crystalline``.
-    Don't forget to update the workspace ``settings.json``.
+    Don't forget to update the key ``crystal-lang.server`` in the workspace ``settings.json``.
   * Debugger support (vscode-lldb extension) works sometimes - but only for simple code fragments.
     Sometimes VSCodium hangs or crashes by starting the debugger (Crystal debugging is in an "early stage").
-
 
 ## Contributing
 
