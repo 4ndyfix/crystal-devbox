@@ -44,6 +44,8 @@ Now you are inside the Crystal devbox (in the running Docker container). The she
 * **Before ussing CLI or UI it is urgently needed to close an outside running Firefox browser!**
 * **Before launching anything it is recommended to read [Hints & Experience](#hints-&-experience) below.**
 
+![](./public/images/terminal.png)
+
 ### CLI
 
 Run the devbox-launcher binary ``launcher -h``. Available options are:
@@ -65,6 +67,8 @@ Run the devbox-launcher binary ``launcher -h``. Available options are:
 Run the devbox-launcher shell script ``launcher-ui.sh``. It starts the devbox-launcher binary
 ``launcher`` in UI mode. This means a Kemal-service is running now and a Firefox browser comes up
 as UI.
+
+![](./public/images/launcher-ui.png)
 
 ## Hints & Experience
 * Before ussing CLI or UI it is urgently needed to close an outside running Firefox browser.
