@@ -32,7 +32,7 @@ ENV VSCODIUM_EXTENSIONS_LATEST="\
   PKief.material-icon-theme"
 
 ENV VSCODIUM_EXTENSIONS_SPECIFIC="\
-  https://github.com/vadimcn/vscode-lldb/releases/download/v1.6.1/codelldb-x86_64-linux.vsix"
+  https://github.com/vadimcn/vscode-lldb/releases/download/v1.6.3/codelldb-x86_64-linux.vsix"
 
 ENV CRYSTAL_BOOK_DIR=$ADD_INSTALL_DIR/crystal-book
 
