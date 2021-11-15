@@ -2,7 +2,7 @@
 set -e
 
 GIT_TAG=$(git describe)
-CRYSTAL_VERSION='1.0.0'
+CRYSTAL_VERSION='1.2.2'
 
 NAME='crystal-devbox'
 TAG=${GIT_TAG}'-'${CRYSTAL_VERSION}
@@ -19,3 +19,4 @@ docker build \
  .
 
 docker tag $IMAGE_TAGGED $IMAGE_LATEST
+

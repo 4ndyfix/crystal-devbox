@@ -32,7 +32,7 @@ ENV VSCODIUM_EXTENSIONS_LATEST="\
   PKief.material-icon-theme"
 
 ENV VSCODIUM_EXTENSIONS_SPECIFIC="\
-  https://github.com/vadimcn/vscode-lldb/releases/download/v1.6.3/codelldb-x86_64-linux.vsix"
+  https://github.com/vadimcn/vscode-lldb/releases/download/v1.6.10/codelldb-x86_64-linux.vsix"
 
 ENV CRYSTAL_BOOK_DIR=$ADD_INSTALL_DIR/crystal-book
 
@@ -47,7 +47,7 @@ RUN apt-get update && apt-get install -y \
   # ------------------\
   # required X11 stuff \
   # --------------------\
-  libxext6 libxrender1 libxtst6 libxi6 libxcb-dri3-0 \
+  libxext6 libxrender1 libxtst6 libxi6 libxcb-dri3-0 libxshmfence1 \
   # \
   # -------------------\
   # suitable misc tools \
@@ -73,8 +73,8 @@ RUN apt-get update && apt-get install -y \
   # \
   # ------------------------\
   # install specific Crystal \
-  # --------------------------\
-  && curl -fsSL https://crystal-lang.org/install.sh | bash -s -- --crystal=$CRYSTAL_VERSION \
+  # --------------------------\ only by major.minor
+  && curl -fsSL https://crystal-lang.org/install.sh | bash -s -- --version=${CRYSTAL_VERSION%.*} \
   # \
   # ---------------------------------\
   # install Crystal API documentation \
