@@ -47,7 +47,7 @@ RUN apt-get update && apt-get install -y \
   # ------------------\
   # required X11 stuff \
   # --------------------\
-  libxext6 libxrender1 libxtst6 libxi6 libxcb-dri3-0 libxshmfence1 \
+  libxext6 libxrender1 libxtst6 libxi6 libxcb-dri3-0 libxshmfence1 dbus-x11 \
   # \
   # -------------------\
   # suitable misc tools \
