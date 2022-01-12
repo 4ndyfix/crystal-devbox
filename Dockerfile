@@ -39,7 +39,7 @@ ENV CRYSTAL_BOOK_DIR=$ADD_INSTALL_DIR/crystal-book
 COPY --from=builder /tmp/bin/launcher /usr/local/bin/launcher
 COPY --from=builder /tmp/public /app/public
 COPY scripts/* /usr/local/bin/
-COPY --from=docker:19.03 /usr/local/bin/docker /usr/local/bin/
+COPY --from=docker:20.10 /usr/local/bin/docker /usr/local/bin/
 ADD vscode-lldb/crystal-formatters.tgz $ADD_INSTALL_DIR/
 
 RUN apt-get update && apt-get install -y \
