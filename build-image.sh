@@ -4,7 +4,7 @@ set -e
 GIT_TAG=$(git describe)
 CRYSTAL_VERSION='1.3.0'
 
-NAME='crystal-devbox'
+NAME='4ndyfix/crystal-devbox'
 TAG=${GIT_TAG}'-'${CRYSTAL_VERSION}
 
 IMAGE_TAGGED=$NAME:$TAG

@@ -19,6 +19,6 @@ docker run \
   -w $PWD \
   --net=host \
   --privileged \
-  crystal-devbox:latest \
+  4ndyfix/crystal-devbox:latest \
   "$@"
 
