@@ -54,7 +54,7 @@ RUN apt-get update && apt-get install -y \
   # ---------------------\
   locales fontconfig bash-completion firefox vim mc python3-venv apt-utils \
   zip unzip tar file \
-  wget curl gnupg iputils-ping net-tools openssh-client \
+  wget curl gnupg iputils-ping net-tools openssh-client netcat \
   # \
   # ----------------------------------------------------------\
   # required, recommended & suggested dev-packages for Crystal \
@@ -90,6 +90,8 @@ RUN apt-get update && apt-get install -y \
   && mkdir $CRYSTAL_BOOK_DIR \
   && git clone https://github.com/crystal-lang/crystal-book $CRYSTAL_BOOK_DIR \
   && chmod 777 $CRYSTAL_BOOK_DIR \
+  && cd $CRYSTAL_BOOK_DIR \
+  && wait4book.sh \
   # \
   # ------------------------------------------------\
   # install latest stable VSCodium & some extensions \

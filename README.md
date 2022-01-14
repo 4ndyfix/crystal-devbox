@@ -13,7 +13,7 @@ Further some important development packages and commandline tools (e.g. git, gcc
 are also available inside (look at Dockerfile).  
 
 The basic idea behind was to have a completely bundled development environment
-for using offline or behind a firewall. 
+also for using offline or behind a firewall. 
 The running Docker container includes enough X11 stuff for launching UI tools (Firefox & VSCodium).
 
 Basically all necessary programs, tools and packages are living inside the image/container.
@@ -73,8 +73,6 @@ as UI.
 ## Hints & Experience
 * Before ussing CLI or UI it is urgently needed to close an outside running Firefox browser.
   This is because Firefox will be launched with a File-based URL for API documentation. 
-* Launching the Language Reference (a.k.a. Crystal book) for the first time can take up to 25 seconds.
-  So please wait ... or try again.
 * The crystal-devbox was originally developed on Ubuntu 20.04 LTS with Docker 19.03.x.  
   Build and run of the image was also manually tested on Centos 7.9 with Docker 20.10.5.
   in a Virtualbox.
