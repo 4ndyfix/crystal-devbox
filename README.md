@@ -21,7 +21,7 @@ However all projects, configurations and other data are awaited outside below th
 directory. 
 
 The user inside and outside of the running container is exactly the same user (uid, gid, etc.),
-only the prompt of the shell is changing (starts with a whale and ends with a gemstone) to recognice where you are.
+only the prompt of the shell is changing (starts with a whale and ends with a gemstone) to recognize where you are.
 
 The Docker container starts with several Linux-specific bind mounts. Therefore it's very unlikely that it works on MacOS or Windows.
 
@@ -36,6 +36,7 @@ Okay, the Docker image is not the smallest (~2GB), but it is as small as possibl
 
 Build the Docker image for yourself online by running the bash script ``./build-image.sh``. Inside set the wanted ``CRYSTAL_VERSION`` before. The build can take several minutes.
 After that the Docker image can be transfered by ``docker save/load`` as a tar file.
+Images with different Crystal versions can also be found at https://hub.docker.com/repository/docker/4ndyfix/crystal-devbox. 
 
 ## Run
 
