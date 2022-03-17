@@ -23,7 +23,7 @@ directory.
 The user inside and outside of the running container is exactly the same user (uid, gid, etc.),
 only the prompt of the shell is changing (starts with a whale and ends with a gemstone) to recognize where you are.
 
-The Docker container starts with several Linux-specific bind mounts. Therefore it's very unlikely that it works on MacOS or Windows.
+The Docker container starts with several Linux-specific bind mounts. I don't know if this works also on MacOS or Windows.
 
 Okay, the Docker image is not the smallest (~2GB), but it is as small as possible by build ;-)
 
@@ -34,9 +34,9 @@ Okay, the Docker image is not the smallest (~2GB), but it is as small as possibl
 
 ## Build
 
-Build the Docker image for yourself online by running the bash script ``./build-image.sh``. Inside set the wanted ``CRYSTAL_VERSION`` before. The build can take several minutes.
-After that the Docker image can be transfered by ``docker save/load`` as a tar file.
-Images with different Crystal versions can also be found at https://hub.docker.com/repository/docker/4ndyfix/crystal-devbox. 
+Build the Docker image for yourself online by running the bash script ``./build-image.sh``. Inside the script set the wanted ``CRYSTAL_VERSION`` before. The build can take several minutes.
+For offline usage the Docker image can be transfered by ``docker save/load``.
+Already built images of different Crystal versions can also be found at https://hub.docker.com/repository/docker/4ndyfix/crystal-devbox. 
 
 ## Run
 
@@ -54,7 +54,6 @@ Run the devbox-launcher binary ``launcher -h``. Available options are:
 -r, --reference                  Open Crystal book (language reference)
 -a, --api                        Show Crystal API documentation
 -p, --playground                 Launch Crystal playground
---playground-port=PORT           Crystal playground service port
 -c, --vscodium                   Start VSCodium Editor
 -n, --no-colorize                No colorized console output
 -l LEVEL, --log-level=LEVEL      Logging level as string
@@ -88,7 +87,7 @@ as UI.
     and ``launch.json`` used for language server and debugging.
   * The language server Crystalline is available at ``/usr/local/bin/crystalline``.
     Don't forget to update the key ``crystal-lang.server`` in the workspace ``settings.json``.
-  * Debugger support (vscode-lldb extension) works sometimes - but only for simple code fragments.
+  * Debugger support (vscode-lldb extension) works basically - but only for simple code fragments.
     Sometimes VSCodium hangs or crashes by starting the debugger (Crystal debugging is in an "early stage").
 
 ## Contributing
