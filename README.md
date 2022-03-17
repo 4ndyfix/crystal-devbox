@@ -85,6 +85,8 @@ as UI.
   * Please use the launcher (CLI or UI) to start VSCodium, because specific options are used.
   * The subdirectory ``.vscode`` contains the workspace (project) configuration files ``settings.json``, ``tasks.json``
     and ``launch.json`` used for language server and debugging.
+    You can copy the complete subdirectory for use in other projects as well before launching VSCodium.
+    However an additional subdirectory ``bin`` for debugging then also required.
   * The language server Crystalline is available at ``/usr/local/bin/crystalline``.
     Don't forget to update the key ``crystal-lang.server`` in the workspace ``settings.json``.
   * Debugger support (vscode-lldb extension) works basically - but only for simple code fragments.
