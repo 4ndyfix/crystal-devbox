@@ -11,7 +11,7 @@ module DevboxLauncher
     @playground_port : String
     STAR_LINE = "*" * 80
     BROWSER = "/usr/bin/firefox"
-    PROFILE_PATH = File.join ENV["HOME"], "mozilla", "firefox4crystal"
+    PROFILE_PATH = File.join ENV["HOME"], ".mozilla", "firefox4crystal"
 
     def initialize
       @reference, @api, @playground, @vscodium = false, false, false, false
