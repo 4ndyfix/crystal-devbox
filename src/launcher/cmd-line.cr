@@ -11,7 +11,7 @@ module DevboxLauncher
     @playground_port : String
     STAR_LINE = "*" * 80
     BROWSER = "/usr/bin/firefox"
-    PROFILE_PATH = File.join ENV["USER"], "mozilla", "firefox4crystal"
+    PROFILE_PATH = File.join ENV["HOME"], "mozilla", "firefox4crystal"
 
     def initialize
       @reference, @api, @playground, @vscodium = false, false, false, false
@@ -37,12 +37,16 @@ module DevboxLauncher
       @colorize && ::Log::StaticFormatter.colorized = true
       @playground_port = opts[:playground_port]? || ENV["PLAYGROUND_PORT"]? || "48080"
       @log_level = opts[:log_level]? || ENV["LOG_LEVEL"]? || "DEBUG"
-      Dir.exists?(PROFILE_PATH) || FileUtils.mkdir_p PROFILE_PATH
+      CmdLine.ensure_firefox_profile_path
       ::Log.setup ::Log::LEVEL[@log_level]
       @show_config_only && (pp self; true) && exit 0
       if @reference | @api | @playground | @vscodium == false
         Log.warn { "Sorry, nothing to launch! Try --help." }
       end
+    end
+
+    def self.ensure_firefox_profile_path
+      Dir.exists?(PROFILE_PATH) || FileUtils.mkdir_p PROFILE_PATH
     end
 
     def self.daemonize(prog : String, params : Array(String), working_dir = FileUtils.pwd) : Bool

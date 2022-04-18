@@ -7,12 +7,12 @@ module DevboxLauncher
     ::Log.setup :debug
     ::Log::StaticFormatter.colorized = true
     Log = ::Log.for self.name
-    BROWSER = "/usr/bin/firefox"
     PORT = 12345
 
     def self.up
       Kemal.config.port = PORT
-      spawn try_open_ui(BROWSER, PORT)
+      CmdLine.ensure_firefox_profile_path
+      spawn try_open_ui PORT
       Kemal.run
     rescue exc : Socket::BindError # Address already in use 
       Log.warn { "Launcher service is already running! - Try to open web UI anyway ..." }
@@ -52,7 +52,7 @@ module DevboxLauncher
       render "public/views/not_found.ecr"
     end
 
-    def self.try_open_ui(browser : String, port : Int32)
+    def self.try_open_ui(port : Int32)
       Log.info { "Try to connect Crystal devbox-launcher socket ..." }
       if CmdLine.with_retries(5) { CmdLine.server_socket_connectable? "localhost", port }
         Log.info { "Crystal devbox-launcher socket is connectable." }
