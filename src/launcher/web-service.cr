@@ -66,7 +66,7 @@ module DevboxLauncher
       else
         Log.error { "Sorry, Crystal devbox-launcher service is not available!" }
       end
-      CmdLine.open_in_browser browser, "http://localhost:#{port}"
+      CmdLine.open_in_browser "http://localhost:#{port}"
     end
   end
 end

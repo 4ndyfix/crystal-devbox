@@ -9,8 +9,9 @@ module DevboxLauncher
   class CmdLine
     Log       = ::Log.for self.name
     @playground_port : String
-    @browser : String
     STAR_LINE = "*" * 80
+    BROWSER = "/usr/bin/firefox"
+    PROFILE_PATH = File.join ENV["USER"], "mozilla", "firefox4crystal"
 
     def initialize
       @reference, @api, @playground, @vscodium = false, false, false, false
@@ -26,7 +27,6 @@ module DevboxLauncher
         parser.on("-c", "--vscodium", "Start VSCodium Editor") { @vscodium = true }
         parser.on("-n", "--no-colorize", "No colorized console output") { @colorize = false }
         parser.on("-l LEVEL", "--log-level=LEVEL", "Logging level as string") { |val| opts[:log_level] = val }
-        parser.on("-b BROWSER", "--browser=BROWSER", "Which browser to use") { |val| opts[:browser] = val }
         parser.on("-s", "--show-config-only", "Show config only (instance vars)") { @show_config_only = true }
         parser.on("-v", "--version", "Show Crystal version info") { |val| puts VERSION; exit 0 }
         parser.on("-h", "--help", "Show this help") { |val| puts parser; exit 0 }
@@ -37,7 +37,7 @@ module DevboxLauncher
       @colorize && ::Log::StaticFormatter.colorized = true
       @playground_port = opts[:playground_port]? || ENV["PLAYGROUND_PORT"]? || "48080"
       @log_level = opts[:log_level]? || ENV["LOG_LEVEL"]? || "DEBUG"
-      @browser = opts[:browser]? || ENV["BROWSER"]? || "/usr/bin/firefox"
+      Dir.exists?(PROFILE_PATH) || FileUtils.mkdir_p PROFILE_PATH
       ::Log.setup ::Log::LEVEL[@log_level]
       @show_config_only && (pp self; true) && exit 0
       if @reference | @api | @playground | @vscodium == false
@@ -88,13 +88,13 @@ module DevboxLauncher
       success
     end
 
-    def self.open_in_browser(browser : String, url : String)
-      Log.info { "Try to start #{browser} browser ..." }
-      success = daemonize browser, ["#{url}"]
+    def self.open_in_browser(url : String)
+      Log.info { "Try to start #{BROWSER} browser ..." }
+      success = daemonize BROWSER, ["--profile", PROFILE_PATH, url]
       if success
-        Log.info { "Started a new #{browser} process." }
+        Log.info { "Started a new #{BROWSER} process." }
       else
-        Log.error { "Couldn't start a new #{browser} process!" }
+        Log.error { "Couldn't start a new #{BROWSER} process!" }
       end
     end
 
@@ -166,7 +166,7 @@ module DevboxLauncher
         Log.info { "Launch Crystal book service (language reference) and open UI in browser tab ..." }
         Log.info { STAR_LINE }
         launch_reference
-        CmdLine.open_in_browser @browser, "http://localhost:8000"
+        CmdLine.open_in_browser "http://localhost:8000"
       end
       if @api
         Log.info { STAR_LINE }
@@ -174,7 +174,7 @@ module DevboxLauncher
         Log.info { STAR_LINE }
         docs_entrypoint = "/opt/crystal-docs/index.html"
         if File.exists? docs_entrypoint
-          CmdLine.open_in_browser @browser, "file://#{docs_entrypoint}"
+          CmdLine.open_in_browser "file://#{docs_entrypoint}"
         else
           Log.error { "Sorry, doc's entrypoint file #{docs_entrypoint} is not available!" }
         end
@@ -184,7 +184,7 @@ module DevboxLauncher
         Log.info { "Launch Crystal playground service and open UI in browser tab ..." }
         Log.info { STAR_LINE }
         launch_playground
-        CmdLine.open_in_browser @browser, "http://localhost:#{@playground_port}"
+        CmdLine.open_in_browser "http://localhost:#{@playground_port}"
       end
       if @vscodium
         Log.info { STAR_LINE }
