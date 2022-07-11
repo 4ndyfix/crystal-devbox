@@ -60,7 +60,7 @@ RUN apt-get update && apt-get install -y \
   # required, recommended & suggested dev-packages for Crystal \
   # ------------------------------------------------------------\
   gcc make gdb lldb pkg-config libpcre++-dev libevent-dev \
-  git libssl-dev libz-dev libssh-dev \
+  git libssl-dev libz-dev libssh-dev libssh2-1-dev \
   libxml2-dev libgmp-dev libyaml-dev libreadline-dev libcrypto++-dev llvm-dev \
   # \
   # -----------------\
