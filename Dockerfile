@@ -82,7 +82,7 @@ RUN apt-get update && apt-get install -y \
   && wget -qO - https://github.com/crystal-lang/crystal/releases/download/$CRYSTAL_VERSION/crystal-$CRYSTAL_VERSION-docs.tar.gz | tar -xvz -C $ADD_INSTALL_DIR \
   && cd $ADD_INSTALL_DIR \
   && ln -s crystal-$CRYSTAL_VERSION-docs crystal-docs \
-  && find crystal-docs/ -type f -exec sed -i 's@https://github.com/crystal-lang/crystal/blob/.*/src@file:///usr/share/crystal/src@g' {} \; \
+  && find crystal-docs/ -name "*.html" -exec sed -i 's@https://github.com/crystal-lang/crystal/blob/.*/src@file:///usr/share/crystal/src@g' {} \; \
   # \
   # -----------------------------------------\
   # install Crystal book (language reference) \
