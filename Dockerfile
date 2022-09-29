@@ -123,6 +123,16 @@ RUN apt-get update && apt-get install -y \
   && sed -i -E 's/( build )/ --ignore-crystal-version\1/' Makefile \
   && make && make install \
   # \
+  # -----------------------\
+  # build Crystal by source \
+  # -------------------------\ 
+  && cd /tmp \
+  && git clone https://github.com/crystal-lang/crystal \
+  && cd crystal \
+  && make interpreter=1 \
+  && make std_spec compiler_spec \
+  && cp bin/crystal /usr/local/bin/crystal-with-interpreter \
+  # \
   # ---------------\
   # finally cleanup \
   # -----------------\ 
