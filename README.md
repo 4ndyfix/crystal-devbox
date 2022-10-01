@@ -8,7 +8,7 @@ on Linux.
 
 The Docker image contains Crystal itself (compiler, playground, etc.),
 the API documentation, the crystal-book (language reference), the VSCodium editor,
-some OpenVSX-extensions (vsix), the language server Crystalline and ICR (Interactive Crystal).
+some OpenVSX-extensions (vsix) and the language server Crystalline.
 Further some important development packages and commandline tools (e.g. git, gcc, make)
 are also available inside (look at Dockerfile).  
 

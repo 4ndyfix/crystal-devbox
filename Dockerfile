@@ -1,7 +1,7 @@
 # Multistage Dockerfile
 
 ARG CRYSTAL_VERSION=${CRYSTAL_VERSION:-}
-FROM crystallang/crystal:$CRYSTAL_VERSION as builder
+FROM crystallang/crystal:latest-alpine as builder
 
 WORKDIR /tmp
 COPY . .
@@ -32,7 +32,7 @@ ENV VSCODIUM_EXTENSIONS_LATEST="\
   PKief.material-icon-theme"
 
 ENV VSCODIUM_EXTENSIONS_SPECIFIC="\
-  https://github.com/vadimcn/vscode-lldb/releases/download/v1.6.10/codelldb-x86_64-linux.vsix"
+  https://github.com/vadimcn/vscode-lldb/releases/download/v1.7.4/codelldb-x86_64-linux.vsix"
 
 ENV CRYSTAL_BOOK_DIR=$ADD_INSTALL_DIR/crystal-book
 
@@ -114,24 +114,24 @@ RUN apt-get update && apt-get install -y \
   && gzip -d crystalline.gz \
   && chmod 755 crystalline \
   # \
-  # ---------------------------------\
-  # install ICR (Interactive Crystal) \
-  # -----------------------------------\ 
-  && cd /tmp \
-  && git clone https://github.com/crystal-community/icr.git \
-  && cd icr \
-  && sed -i -E 's/( build )/ --ignore-crystal-version\1/' Makefile \
-  && make && make install \
+  # ---------------------------------------\
+  # build Crystal by source for interpreter \
+  # -----------------------------------------\ 
+  #&& cd /opt \
+  #&& git clone https://github.com/crystal-lang/crystal crystal-compiled \
+  #&& cd crystal-compiled \
+  #&& make interpreter=1 \
+  #&& make std_spec compiler_spec \
   # \
-  # -----------------------\
-  # build Crystal by source \
-  # -------------------------\ 
+  # --------------------------------\
+  # install IC (Interactive Crystal) \
+  # ----------------------------------\
+  # as an REPL interface for the crystal interpreter \
   && cd /tmp \
-  && git clone https://github.com/crystal-lang/crystal \
-  && cd crystal \
-  && make interpreter=1 \
-  && make std_spec compiler_spec \
-  && cp bin/crystal /usr/local/bin/crystal-with-interpreter \
+  && git clone https://github.com/I3oris/ic.git \
+  && cd ic \
+  && make \
+  && make install \
   # \
   # ---------------\
   # finally cleanup \

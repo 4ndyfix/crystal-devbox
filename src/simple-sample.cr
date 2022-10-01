@@ -20,5 +20,6 @@ end
 pp v
 
 msg = "!looc si latsyrc".reverse.capitalize
+msg.
 puts "Result: #{msg}"
 
