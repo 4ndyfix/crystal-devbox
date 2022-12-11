@@ -12,6 +12,7 @@ docker run \
   -v /etc/passwd:/etc/passwd:ro \
   -v /etc/machine-id:/etc/machine-id \
   -v /var/run/docker.sock:/var/run/docker.sock \
+  -v /usr/local/share/ca-certificates:/usr/local/share/ca-certificates/ \
   -v $HOME:$HOME \
   --device /dev/dri \
   -u $(id -u):$(id -g) \
