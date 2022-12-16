@@ -13,7 +13,7 @@ RUN mkdir -p ./bin \
 
 #---------------------------------------------------------------------
 
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 WORKDIR /tmp
 
 ARG CRYSTAL_VERSION=${CRYSTAL_VERSION:-}
@@ -117,21 +117,21 @@ RUN apt-get update && apt-get install -y \
   # ---------------------------------------\
   # build Crystal by source for interpreter \
   # -----------------------------------------\ 
-  #&& cd /opt \
-  #&& git clone https://github.com/crystal-lang/crystal crystal-compiled \
-  #&& cd crystal-compiled \
-  #&& make interpreter=1 \
+  && cd /opt \
+  && git clone https://github.com/crystal-lang/crystal crystal-compiled \
+  && cd crystal-compiled \
+  && make interpreter=1 \
   #&& make std_spec compiler_spec \
   # \
   # --------------------------------\
   # install IC (Interactive Crystal) \
   # ----------------------------------\
   # as an REPL interface for the crystal interpreter \
-  && cd /tmp \
-  && git clone https://github.com/I3oris/ic.git \
-  && cd ic \
-  && make \
-  && make install \
+  #&& cd /tmp \
+  #&& git clone https://github.com/I3oris/ic.git \
+  #&& cd ic \
+  #&& make \
+  #&& make install \
   # \
   # ---------------\
   # finally cleanup \
