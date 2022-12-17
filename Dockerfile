@@ -43,6 +43,9 @@ COPY --from=docker:20.10 /usr/local/bin/docker /usr/local/bin/
 ADD vscode-lldb/crystal-formatters.tgz $ADD_INSTALL_DIR/
 
 RUN apt-get update && apt-get install -y \
+  software-properties-common \
+  && add-apt-repository ppa:mozillateam/ppa \
+  && apt-get update && apt-get install -y \
   # \  
   # ------------------\
   # required X11 stuff \
@@ -52,8 +55,8 @@ RUN apt-get update && apt-get install -y \
   # -------------------\
   # suitable misc tools \
   # ---------------------\
-  locales fontconfig bash-completion firefox vim mc python3-venv apt-utils \
-  zip unzip tar file \
+  locales fontconfig bash-completion vim mc python3-venv apt-utils \
+  zip unzip tar file firefox-esr \
   wget curl gnupg iputils-ping net-tools openssh-client netcat \
   # \
   # ----------------------------------------------------------\
@@ -133,6 +136,12 @@ RUN apt-get update && apt-get install -y \
   #&& make \
   #&& make install \
   # \
+  # ------------\
+  # last actions \
+  # --------------\
+  && chmod o+w /etc/ssl/certs \
+  && ln -s /usr/bin/firefox-esr /usr/bin/firefox \
+  # \ 
   # ---------------\
   # finally cleanup \
   # -----------------\ 
