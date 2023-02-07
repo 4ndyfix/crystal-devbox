@@ -113,7 +113,7 @@ RUN apt-get update && apt-get install -y \
   # install latest language server crystalline \
   # --------------------------------------------\  
   && cd /usr/local/bin \
-  && wget -q https://github.com/elbywan/crystalline/releases/latest/download/crystalline_x86_64-unknown-linux-gnu.gz -O crystalline.gz \
+  && wget -q https://github.com/elbywan/crystalline/releases/latest/download/crystalline_x86_64-unknown-linux-musl.gz -O crystalline.gz \
   && gzip -d crystalline.gz \
   && chmod 755 crystalline \
   # \
