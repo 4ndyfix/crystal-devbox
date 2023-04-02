@@ -126,15 +126,15 @@ RUN apt-get update && apt-get install -y \
   && make interpreter=1 \
   #&& make std_spec compiler_spec \
   # \
-  # --------------------------------\
-  # install IC (Interactive Crystal) \
-  # ----------------------------------\
-  # as an REPL interface for the crystal interpreter \
-  #&& cd /tmp \
-  #&& git clone https://github.com/I3oris/ic.git \
-  #&& cd ic \
-  #&& make \
-  #&& make install \
+  # -------------\
+  # install ameba \
+  # ---------------\
+  && cd /opt \
+  && git clone https://github.com/crystal-ameba/ameba \
+  && cd ameba \
+  && make install \
+  && cd /opt \
+  && rm -r ameba \
   # \
   # ------------\
   # last actions \
