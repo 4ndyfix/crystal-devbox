@@ -57,7 +57,7 @@ RUN apt-get update && apt-get install -y \
   # ---------------------\
   locales fontconfig bash-completion vim mc python3-venv apt-utils \
   zip unzip tar file firefox-esr \
-  wget curl gnupg iputils-ping net-tools openssh-client netcat mkdocs \
+  wget curl gnupg iputils-ping net-tools openssh-client netcat mkdocs pip \
   # \
   # ----------------------------------------------------------\
   # required, recommended & suggested dev-packages for Crystal \
