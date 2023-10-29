@@ -118,14 +118,25 @@ RUN apt-get update && apt-get install -y \
   && gzip -d crystalline.gz \
   && chmod 755 crystalline \
   # \
-  # ---------------------------------------\
-  # build Crystal by source for interpreter \
-  # -----------------------------------------\ 
+  ### ---------------------------------------\
+  ### build Crystal by source for interpreter \
+  ### -----------------------------------------\ 
+  ###&& cd /opt \
+  ###&& git clone https://github.com/crystal-lang/crystal crystal-compiled \
+  ###&& cd crystal-compiled \
+  ###&& make interpreter=1 \
+  ###&& make std_spec compiler_spec \
+  # \
+  # --------------------------------------------\
+  # build & install iteractive crystal I3oris/ic \
+  # ----------------------------------------------\ 
   && cd /opt \
-  && git clone https://github.com/crystal-lang/crystal crystal-compiled \
-  && cd crystal-compiled \
-  && make interpreter=1 \
-  #&& make std_spec compiler_spec \
+  && git clone https://github.com/I3oris/ic.git \
+  && cd ic \
+  && make \
+  && make install \
+  && cd /opt \
+  && rm -r ic \
   # \
   # -------------\
   # install ameba \
