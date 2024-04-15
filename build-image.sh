@@ -10,6 +10,7 @@ TAG=${GIT_TAG}'-'${CRYSTAL_VERSION}
 IMAGE_TAGGED=$NAME:$TAG
 IMAGE_LATEST=$NAME:latest
 
+docker pull crystallang/crystal:latest-alpine 
 docker rmi -f $IMAGE_TAGGED
 docker rmi -f $IMAGE_LATEST
 
