@@ -57,12 +57,12 @@ RUN apt-get update && apt-get install -y \
   # ---------------------\
   locales fontconfig bash-completion vim mc python3-venv apt-utils \
   zip unzip tar file firefox-esr \
-  wget curl gnupg iputils-ping net-tools openssh-client netcat mkdocs pip \
+  wget curl gnupg iputils-ping net-tools openssh-client ncat mkdocs pip \
   # \
   # ----------------------------------------------------------\
   # required, recommended & suggested dev-packages for Crystal \
   # ------------------------------------------------------------\
-  gcc g++ make gdb lldb pkg-config libpcre++-dev libpcre2-dev libevent-dev \
+  gcc g++ make gdb lldb pkg-config libpcre2-dev libevent-dev \
   git libssl-dev libz-dev libssh-dev libssh2-1-dev \
   libxml2-dev libgmp-dev libyaml-dev libreadline-dev libcrypto++-dev llvm-dev \
   # \
@@ -94,7 +94,7 @@ RUN apt-get update && apt-get install -y \
   && git clone https://github.com/crystal-lang/crystal-book $CRYSTAL_BOOK_DIR \
   && chmod 777 $CRYSTAL_BOOK_DIR \
   && cd $CRYSTAL_BOOK_DIR \
-  && pip install -r requirements.txt \
+  && pip install -r requirements.txt --break-system-packages --ignore-installed \
   && wait4book.sh \
   # \
   # ------------------------------------------------\
