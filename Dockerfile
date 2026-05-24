@@ -133,7 +133,7 @@ RUN apt-get update && apt-get install -y \
   && cd /opt \
   && git clone https://github.com/I3oris/ic.git \
   && cd ic \
-  && shards install \
+  && shards install --without-development \
   && make \
   && make install \
   && cd /opt \
